@@ -1,0 +1,24 @@
+---
+title: "**Rose Research**"
+author: "Paslay"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    collapsed: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Links to various projects**
+
+[Nanodrop Experiment](nanodrop_experiment.html)
+
+
+
+
+
