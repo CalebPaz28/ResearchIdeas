@@ -36,7 +36,8 @@ a <- dat %>%
   ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+ 
   geom_point(size = 3, alpha = .5)+
   geom_smooth(size = 1, se = FALSE, method = "loess", 
-              fullrange = FALSE, level = 0.95, span = 0.4, linetype = 1)+
+      fullrange = FALSE, level = 0.95, span = 0.4, linetype = 1)+
+  #geom_hline(yintercept = mean(dat$absorbance))+
   scale_color_brewer(palette = "Set2")+
   theme_classic()+
   labs(title = "Nanodrop of TRNA",
@@ -96,7 +97,11 @@ fig <- dat %>%
   filter(type == "TRNA") %>% 
   plot_ly(x = ~wavelength, y = ~absorbance, color = ~Treatment) %>%
   add_lines(line = list(shape = "spline", smoothing = 1.3)) %>% 
-  add_trace(type = "scatter", showlegend = FALSE)
+  add_trace(type = "scatter", showlegend = FALSE) %>% 
+  add_markers(type = "scatter", showlegend = FALSE) %>% 
+  layout(xaxis = list(title = "Wavelength (nm)"),
+                      rangeslider = list(type = "wavelength"),
+        yaxis = list(title = "Aborbance"))
 fig
 #plotly_IMAGE(fig, format = "png", out_file = "output.png")
 
@@ -142,7 +147,9 @@ a <- dat %>%
   ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+ 
   geom_point(size = 3, alpha = .5)+
   geom_smooth(size = 1, se = FALSE, method = "loess", 
-              fullrange = FALSE, level = 0.95, span = 0.4, linetype = 3)+
+              fullrange = FALSE, level = 0.95, span = 0.4, linetype = 1)+
+  #geom_hline(yintercept = median(dat$absorbance))+
+  geom_vline(xintercept = 260, color = "darkred", linetype = 5)+
   scale_color_brewer(palette = "Set2")+
   theme_classic()+
   labs(title = "Nanodrop of TRNA",
@@ -161,7 +168,8 @@ a <- dat %>%
   ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+ 
   geom_point(size = 3, alpha = .5)+
   geom_smooth(size = 1, se = FALSE, method = "loess", 
-              fullrange = FALSE, level = 0.95, span = 0.4, linetype = 3)+
+      fullrange = FALSE, level = 0.95, span = 0.4, linetype = 2)+
+  geom_vline(xintercept = 260, color = "darkred", linetype = 5)+
   scale_color_brewer(palette = "Set2")+
   theme_classic()+
   labs(title = "Nanodrop of TDNA",
@@ -174,12 +182,16 @@ a
 ## Creating a plot for the Protein alone (ggplot)
 
 ```{r}
+# geom_label() adds a small box around the annotation, # geom_text() does not.
+
 a <- dat %>% 
   filter(type == "Protein") %>% 
   filter(Treatment == "Protein") %>% 
   ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+
   geom_point(size = 3, alpha = .5)+
   geom_smooth(se = FALSE, linetype = 3, span = 0.4)+
+  geom_vline(xintercept = 280, color = "darkred", linetype = 5)+
+  geom_label(aes(x = 285, y = 50, label = "280nm")) + 
   scale_color_brewer(palette = "Set2")+
   theme_classic()+
   labs(title = "Nanodrop of TDNA",
@@ -188,4 +200,77 @@ a <- dat %>%
   theme(legend.position = "top")
 a
 ```
+
+# Facet wrapping or gridding
+
+## Facet wrapping/gridding for TRNA
+
+```{r}
+a <- dat %>% 
+  filter(type == "TRNA") %>% 
+  ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+
+  geom_point(size = 2, alpha = .5)+
+  geom_smooth(se = FALSE, linetype = 3, span = 0.4)+
+  facet_grid(~Treatment)+ 
+  scale_color_brewer(palette = "Set2")+
+  theme_bw()+
+  labs(title = "Nanodrop of TRNA",
+        x = "Wavelength (nm)",
+        y = "Absorbance")+
+  theme(legend.position = "top")
+a
+```
+
+## Facet Wrapping/Gridding for TDNA
+
+```{r}
+a <- dat %>% 
+  filter(type == "TDNA") %>% 
+  ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+
+  geom_point(size = 2, alpha = .5)+
+  geom_smooth(se = FALSE, linetype = 3, span = 0.4)+
+  facet_grid(~Treatment)+ 
+  scale_color_brewer(palette = "Set2")+
+  theme_bw()+
+  labs(title = "Nanodrop of TDNA",
+        x = "Wavelength (nm)",
+        y = "Absorbance")+
+  theme(legend.position = "top")
+a
+```
+
+## Facet Wrapping/Gridding for Protein
+
+```{r}
+a <- dat %>% 
+  filter(type == "Protein") %>% 
+  ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+
+  geom_point(size = 2, alpha = .5)+
+  geom_smooth(se = FALSE, linetype = 3, span = 0.4)+
+  facet_grid(~Treatment)+ 
+  scale_color_brewer(palette = "Set2")+
+  theme_bw()+
+  labs(title = "Nanodrop of Protein",
+        x = "Wavelength (nm)",
+        y = "Absorbance")+
+  theme(legend.position = "top")
+a
+```
+
+```{r, include=FALSE}
+a <- dat %>% 
+  ggplot(aes(x = wavelength, y = absorbance, color = Treatment))+
+  geom_point(size = 2, alpha = .5)+
+  geom_smooth(se = FALSE, linetype = 3, span = 0.4)+
+  facet_grid(~Treatment)+ 
+  scale_color_brewer(palette = "Set2")+
+  theme_bw()+
+  labs(title = "Nanodrop of TDNA",
+        x = "Wavelength (nm)",
+        y = "Absorbance")+
+  theme(legend.position = "top")
+a
+```
+
+
 
