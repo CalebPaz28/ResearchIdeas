@@ -1,7 +1,4 @@
 ---
-title: "**Research Ideas**"
-author: "Paslay"
-date: "`r Sys.Date()`"
 output:
   html_document:
     theme: cosmo
